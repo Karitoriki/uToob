@@ -25,9 +25,9 @@ def get_track(token: str, title: str, artist: str):
     response = requests.get(
         endpoint,
         headers=headers,
-        params=params)
+        params=params).json()
 
-    return response.json()["tracks"]["items"][0]
+    return response["tracks"]["items"][0] if len(response["tracks"]["items"]) != 0 else None
 
     # Get the album name and cover
     # album_name = track["album"]["name"]
@@ -41,15 +41,9 @@ def download_cover(image_url: str) -> bytes:
 
 
 if __name__ == "__main__":
-    download_cover(
-        "image1.jpg",
-        get_track(
-            get_token(),
-            "MURDER PLOT",
-            "Kordhell"
-        )
-        ["album"]
-        ["images"]
-        [0]
-        ["url"]
+    get_track(
+        get_token(),
+        "Yoiyoi Kokon",
+        "Reol"
     )
+    print("")

@@ -15,13 +15,13 @@ def setTags(path: str, title: str = "", artist: str = "") -> None:
 
     audio.add(mp3tag.TPE1(encoding=3, text=[artist]))  # Artist
 
-    track = get_track(token=spot_token, title=title, artist=artist)
-    audio.add(mp3tag.TALB(encoding=3, text=[track["album"]["name"]]))   # Album
+    if (track := get_track(token=spot_token, title=title, artist=artist)) is not None:
+        audio.add(mp3tag.TALB(encoding=3, text=[track["album"]["name"]]))   # Album
 
-    album_art = mp3tag.APIC(data=download_cover(track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
-    audio.add(album_art)
+        album_art = mp3tag.APIC(data=download_cover(track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
+        audio.add(album_art)
 
-    audio.add(mp3tag.TDRC(encoding=3, text=[track['album']['release_date'][:-6]]))
+        audio.add(mp3tag.TDRC(encoding=3, text=[track['album']['release_date'][:-6]]))
     audio.save()
 
 
