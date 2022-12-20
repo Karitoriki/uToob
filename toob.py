@@ -1,15 +1,27 @@
 from pytube import YouTube, Playlist
+from Spotify import get_token, get_track, download_cover
 import subprocess
 import os
 import mutagen.id3 as mp3tag
+
 parent_dir = 'C:/Users/andre/Documents/Uni/Local Stuff/'
+spot_token = get_token()
 
 
-def setTags(path: str, title: str = "", artist: str = "", album: str = "") -> None:
+def setTags(path: str, title: str = "", artist: str = "") -> None:
     audio = mp3tag.ID3(path)
+
     audio.add(mp3tag.TIT2(encoding=3, text=[title]))   # Title
+
     audio.add(mp3tag.TPE1(encoding=3, text=[artist]))  # Artist
-    audio.add(mp3tag.TALB(encoding=3, text=[album]))   # Album
+
+    track = get_track(token=spot_token, title=title, artist=artist)
+    audio.add(mp3tag.TALB(encoding=3, text=[track["album"]["name"]]))   # Album
+
+    album_art = mp3tag.APIC(data=download_cover(track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
+    audio.add(album_art)
+
+    audio.add(mp3tag.TDRC(encoding=3, text=[track['album']['release_date'][:-6]]))
     audio.save()
 
 
@@ -21,17 +33,18 @@ def mp4_to_mp3(vid_path: str) -> str:
     return filename
 
 
-def Download(link: str, title: str = "", artist: str = "", album: str = "") -> None:
+def Download(link: str, title: str = "", artist: str = "") -> None:
     youtubeObject = YouTube(link).streams.get_audio_only()
     youtubeObject.download(output_path="downloadMusic")
-    setTags(mp4_to_mp3("downloadMusic/" + youtubeObject.default_filename), title=title, artist=artist, album=album)
+    setTags(mp4_to_mp3("downloadMusic/" + youtubeObject.default_filename),
+            title=title, artist=artist)
 
 
 def get_playlist(list: str) -> None:
     playlist = Playlist(list)
-    for item in playlist:
-        song = YouTube(item)
-        Download(item, title=song.title, artist=song.author[:-8]if song.author[-8:] == ' - Topic' else song.author[:])
+    for song in playlist.videos:
+        Download(song.watch_url, title=song.title,
+                 artist=song.author[:-8]if song.author[-8:] == ' - Topic' else song.author[:])
 
 
 if __name__ == "__main__":

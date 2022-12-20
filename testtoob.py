@@ -25,6 +25,10 @@ track = data["tracks"]["items"][0]
 # Get the album name and cover
 album_name = track["album"]["name"]
 album_cover_url = track["album"]["images"][0]["url"]
+release_date = track['album']['release_date'][:-6]
+album_artist = track['album']['artists'][0]['name']
 
 print(f"Album name: {album_name}")
 print(f"Album cover URL: {album_cover_url}")
+print(f"Album release date: {release_date}")
+print(f"Album Artist: {album_artist}")

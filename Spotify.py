@@ -13,5 +13,43 @@ def get_token() -> str:
     ).json()["access_token"]
 
 
+def get_track(token: str, title: str, artist: str):
+    endpoint = "https://api.spotify.com/v1/search"
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    params = {
+        "q": f"track:{title} artist:{artist}",
+        "type": "track"
+    }
+    response = requests.get(
+        endpoint,
+        headers=headers,
+        params=params)
+
+    return response.json()["tracks"]["items"][0]
+
+    # Get the album name and cover
+    # album_name = track["album"]["name"]
+    # album_cover_url = track["album"]["images"][0]["url"]
+    # release_date = track['album']['release_date'][:-6]
+    # album_artist = track['album']['artists'][0]['name']
+
+
+def download_cover(image_url: str) -> bytes:
+    return requests.get(image_url).content
+
+
 if __name__ == "__main__":
-    print(get_token())
+    download_cover(
+        "image1.jpg",
+        get_track(
+            get_token(),
+            "MURDER PLOT",
+            "Kordhell"
+        )
+        ["album"]
+        ["images"]
+        [0]
+        ["url"]
+    )
