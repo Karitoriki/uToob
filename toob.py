@@ -22,6 +22,8 @@ def setTags(path: str, title: str = "", artist: str = "") -> None:
         audio.add(album_art)
 
         audio.add(mp3tag.TDRC(encoding=3, text=[track['album']['release_date'][:-6]]))
+    else:
+        print("Did not find a title")
     audio.save()
 
 
@@ -48,4 +50,5 @@ def get_playlist(list: str) -> None:
 
 
 if __name__ == "__main__":
-    get_playlist(input("Paste your Playlist link here: "))
+    # get_playlist(input("Paste your Playlist link here: "))
+    setTags("downloadMusic/Nightcore - Dance With the Devil.mp3", "Dance With the Devil", "Nightcore Reality")
