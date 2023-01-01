@@ -16,12 +16,15 @@ def setTags(path: str, title: str = "", artist: str = "") -> None:
     audio.add(mp3tag.TPE1(encoding=3, text=[artist]))  # Artist
 
     if (track := get_track(token=spot_token, title=title, artist=artist)) is not None:
-        audio.add(mp3tag.TALB(encoding=3, text=[track["album"]["name"]]))   # Album
+        audio.add(mp3tag.TALB(encoding=3, text=[
+                  track["album"]["name"]]))   # Album
 
-        album_art = mp3tag.APIC(data=download_cover(track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
+        album_art = mp3tag.APIC(data=download_cover(
+            track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
         audio.add(album_art)
 
-        audio.add(mp3tag.TDRC(encoding=3, text=[track['album']['release_date'][:-6]]))
+        audio.add(mp3tag.TDRC(encoding=3, text=[
+                  track['album']['release_date'][:-6]]))
     else:
         print("Did not find a title")
     audio.save()
@@ -50,5 +53,5 @@ def get_playlist(list: str) -> None:
 
 
 if __name__ == "__main__":
-    # get_playlist(input("Paste your Playlist link here: "))
-    setTags("downloadMusic/Nightcore - Dance With the Devil.mp3", "Dance With the Devil", "Nightcore Reality")
+    get_playlist(input("Paste your Playlist link here: "))
+    # setTags("downloadMusic/.mp3", "", "")
