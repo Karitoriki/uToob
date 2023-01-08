@@ -8,7 +8,7 @@ parent_dir = 'C:/Users/andre/Documents/Uni/Local Stuff/'
 spot_token = get_token()
 
 
-def setTags(path: str, title: str = "", artist: str = "") -> None:
+def setTags(path: str, title: str = "", artist: str = "") -> str | None:
     audio = mp3tag.ID3(path)
 
     audio.add(mp3tag.TIT2(encoding=3, text=[title]))   # Title
@@ -27,6 +27,7 @@ def setTags(path: str, title: str = "", artist: str = "") -> None:
                   track['album']['release_date'][:-6]]))
     else:
         print("Did not find a title")
+        return path
     audio.save()
 
 
@@ -38,18 +39,32 @@ def mp4_to_mp3(vid_path: str) -> str:
     return filename
 
 
-def Download(link: str, title: str = "", artist: str = "") -> None:
+def Download(link: str, title: str = "", artist: str = "") -> None | str:
     youtubeObject = YouTube(link).streams.get_audio_only()
     youtubeObject.download(output_path="downloadMusic")
-    setTags(mp4_to_mp3("downloadMusic/" + youtubeObject.default_filename),
-            title=title, artist=artist)
+    return setTags(
+        mp4_to_mp3("downloadMusic/" + youtubeObject.default_filename),
+        title=title,
+        artist=artist
+    )
 
 
 def get_playlist(list: str) -> None:
     playlist = Playlist(list)
+    errorList: list[str] = []
     for song in playlist.videos:
-        Download(song.watch_url, title=song.title,
-                 artist=song.author[:-8]if song.author[-8:] == ' - Topic' else song.author[:])
+        if isinstance(
+            err := Download(
+                song.watch_url,
+                title=song.title,
+                artist=song.author[:-8]
+                if song.author[-8:] == ' - Topic'
+                else song.author[:]
+            ),
+            str
+        ):
+            errorList.append(err)
+    print(errorList)
 
 
 if __name__ == "__main__":
