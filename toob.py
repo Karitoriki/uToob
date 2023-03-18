@@ -68,5 +68,5 @@ def get_playlist(list: str) -> None:
 
 
 if __name__ == "__main__":
-    get_playlist(input("Paste your Playlist link here: "))
-    # setTags("downloadMusic/.mp3", "", "")
+    # get_playlist(input("Paste your Playlist link here: "))
+    setTags("downloadMusic/.mp3", "", "")

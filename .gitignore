@@ -9,7 +9,7 @@
 **/.idea
 **/.vscode
 
-**/downloadMusic
+**/downloadMusic*
 
 # Python
 **/__pycache__
