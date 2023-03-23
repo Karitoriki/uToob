@@ -69,4 +69,7 @@ def get_playlist(list: str) -> None:
 
 if __name__ == "__main__":
     # get_playlist(input("Paste your Playlist link here: "))
-    setTags("downloadMusic/.mp3", "", "")
+    while True:
+        rile = input("Filename: ")
+        setTags(f"downloadMusic/{rile}.mp3", input("Title: "), input("Artist: "))
+    # Download("https://www.youtube.com/watch?v=GT1pg4XJlfg", "BURN IT ALL", "Suave Lee")
