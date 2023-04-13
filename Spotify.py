@@ -34,7 +34,7 @@ def get_track(token: str, title: str, artist: str):
         artistSpot = ', '.join([track['artists'][art]['name']
                                 for art in range(len(track['artists']))])
         print(f"{trackI}) {titleSpot} - {artistSpot}")
-    
+
     return response["tracks"]["items"][int(input("Choose your track: "))] if len(response["tracks"]["items"]) != 0 else None
 
     # Get the album name and cover
