@@ -13,11 +13,12 @@ def setTags(path: str, title: str = "", artist: str = "") -> str | None:
 
     audio.add(mp3tag.TIT2(encoding=3, text=[title]))   # Title
 
-    audio.add(mp3tag.TPE1(encoding=3, text=[artist]))  # Artist
-
     if (track := get_track(token=spot_token, title=title, artist=artist)) is not None:
         audio.add(mp3tag.TALB(encoding=3, text=[
                   track["album"]["name"]]))   # Album
+
+        artistSpot = ', '.join([track['artists'][x]['name'] for x in range(len(track['artists']))])
+        audio.add(mp3tag.TPE1(encoding=3, text=artistSpot))  # Artist
 
         album_art = mp3tag.APIC(data=download_cover(
             track["album"]["images"][0]["url"]), mime="image/jpeg", type=3)
@@ -71,5 +72,5 @@ if __name__ == "__main__":
     # get_playlist(input("Paste your Playlist link here: "))
     while True:
         rile = input("Filename: ")
-        setTags(f"downloadMusic/{rile}.mp3", input("Title: "), input("Artist: "))
-    # Download("https://www.youtube.com/watch?v=GT1pg4XJlfg", "BURN IT ALL", "Suave Lee")
+        setTags(f"downloadMusic1\\{rile}.mp3", input("Title: "), input("Artist: "))
+    # Download("https://www.youtube.com/watch?v=GT1pg4XJlfg", "BURN IT ALL", "Suave Lee")input("Title: ")

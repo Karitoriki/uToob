@@ -22,12 +22,20 @@ def get_track(token: str, title: str, artist: str):
         "q": f"track:{title} artist:{artist}",
         "type": "track"
     }
+    print("Searching...")
     response = requests.get(
         endpoint,
         headers=headers,
         params=params).json()
-
-    return response["tracks"]["items"][0] if len(response["tracks"]["items"]) != 0 else None
+    print(f"Found {len(response['tracks']['items'])} Tracks")
+    for trackI in range(len(response['tracks']['items'])):
+        track = response['tracks']['items'][trackI]
+        titleSpot = track['name']
+        artistSpot = ', '.join([track['artists'][art]['name']
+                                for art in range(len(track['artists']))])
+        print(f"{trackI}) {titleSpot} - {artistSpot}")
+    
+    return response["tracks"]["items"][int(input("Choose your track: "))] if len(response["tracks"]["items"]) != 0 else None
 
     # Get the album name and cover
     # album_name = track["album"]["name"]
@@ -41,9 +49,4 @@ def download_cover(image_url: str) -> bytes:
 
 
 if __name__ == "__main__":
-    get_track(
-        get_token(),
-        "Yoiyoi Kokon",
-        "Reol"
-    )
     print("")
