@@ -11,11 +11,11 @@ spot_token = get_token()
 def setTags(path: str, title: str = "", artist: str = "") -> str | None:
     audio = mp3tag.ID3(path)
 
-    audio.add(mp3tag.TIT2(encoding=3, text=[title]))   # Title
-
     if (track := get_track(token=spot_token, title=title, artist=artist)) is not None:
         audio.add(mp3tag.TALB(encoding=3, text=[
                   track["album"]["name"]]))   # Album
+
+        audio.add(mp3tag.TIT2(encoding=3, text=track['name']))   # Title
 
         artistSpot = ', '.join([track['artists'][x]['name'] for x in range(len(track['artists']))])
         audio.add(mp3tag.TPE1(encoding=3, text=artistSpot))  # Artist
